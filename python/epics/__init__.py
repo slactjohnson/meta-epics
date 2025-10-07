@@ -49,20 +49,6 @@ def get_extra_compiler_flags(d) -> list[str]:
     return [
         f'--sysroot={d.getVar('RECIPE_SYSROOT')}'
     ]
-    
-
-def find_epics_base(d) -> str:
-    """
-    Attempt to locate EPICS base, returns full path to it
-    """
-    pfx = d.getVar('RECIPE_SYSROOT')
-    path = f'{pfx}/opt/epics/epics-base'
-    for f in os.listdir(path):
-        if f == '.' or f == '..': continue
-        if os.path.isfile(f'{path}/{f}'): continue
-        if os.path.exists(f'{path}/{f}/configure/CONFIG_SITE'):
-            return f'{path}/{f}'
-    return None
 
 def is_epics_package(d, name: str) -> str|None:
     """
@@ -71,13 +57,9 @@ def is_epics_package(d, name: str) -> str|None:
     """
     pfx = d.getVar('RECIPE_SYSROOT')
     path = f'{pfx}/opt/epics/{name}'
-    if not os.path.exists(path): return None
-    for f in os.listdir(path):
-        if f == '.' or f == '..': continue
-        if os.path.isfile(f'{path}/{f}'): continue
-        # Should pass for everything
-        if os.path.exists(f'{path}/{f}/configure/RELEASE'):
-            return f'{path}/{f}'
+    # Should pass for everything EPICS related
+    if os.path.exists(f'{path}/configure/RELEASE'):
+        return path
     return None
 
 def get_depends(d) -> dict:
@@ -109,8 +91,9 @@ def generate_release_local(d, extra: dict = {}):
         Extra variables to add to the RELEASE.local.
         This is a NAME -> VALUE mapping
     """
+    root = d.getVar('RECIPE_SYSROOT')
     with open('configure/RELEASE.local', 'w') as fp:
-        fp.write(f'EPICS_BASE={find_epics_base(d)}\n')
+        fp.write(f'EPICS_BASE={root}/opt/epics/epics-base\n')
         # Write out modules and their associated paths
         deps = get_depends(d)
         for mn, mv in deps.items():
@@ -139,11 +122,10 @@ def generate_config_site(d, extra: dict = {}):
     """
     pfx = d.getVar('RECIPE_SYSROOT')
     pn = d.getVar('PN')
-    pv = d.getVar('PV')
     with open('configure/CONFIG_SITE.local', 'w') as fp:
         # Tweak location of build products
-        fp.write(f'INSTALL_LOCATION={pfx}/opt/epics/{pn}/{pv}\n')
-        fp.write(f'FINAL_LOCATION={pfx}/opt/epics/{pn}/{pv}\n')
+        fp.write(f'INSTALL_LOCATION={pfx}/opt/epics/{pn}\n')
+        fp.write(f'FINAL_LOCATION={pfx}/opt/epics/{pn}\n')
         # append extras
         for e, v in extra.items():
             fp.write(f'{e}={v}\n')
@@ -163,10 +145,4 @@ def generate_config_site(d, extra: dict = {}):
 
     print(f'Generated {target_cfg_site}:')
     _cat_file(target_cfg_site)
-
-def generate_release_site(d):
-    """
-    Generates a RELEASE_SITE for the SLAC build system
-    """
-    pass
 

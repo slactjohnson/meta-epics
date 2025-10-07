@@ -14,8 +14,6 @@ python do_configure() {
     print(f'epics target={epics.target_arch(d)}')
 
     print(f'RECIPE_SYSROOT={d.getVar("RECIPE_SYSROOT")}')
-    
-    
 
     # Generate a RELEASE.local handling all dependencies
     epics.generate_release_local(d)
@@ -40,11 +38,10 @@ python do_install() {
     
     if r.returncode != 0:
         raise Exception('Build failed')
-
 }
 
-FILES:${PN} += "/opt/epics/${MODNAME}/${PV}/*"
+FILES:${PN} += "/opt/epics/${MODNAME}/*"
 
 # Pack together a -dev package so we can expose these files to other recipes
 SYSROOT_DIRS += "/opt/epics"
-FILES_${PN}-dev += "/opt/epics/${MODNAME}/${PV}/*"
+FILES_${PN}-dev += "/opt/epics/${MODNAME}/*"
