@@ -106,12 +106,15 @@ def generate_config_site(d, extra: dict = {}):
         Extra variables to add to the end of CONFIG_SITE.local
         Name -> value mapping
     """
-    pfx = d.getVar('RECIPE_SYSROOT')
+    pfx = d.getVar('D')
     pn = d.getVar('PN')
     with open('configure/CONFIG_SITE.local', 'w') as fp:
         # Tweak location of build products
         fp.write(f'INSTALL_LOCATION={pfx}/opt/epics/{pn}\n')
         fp.write(f'FINAL_LOCATION={pfx}/opt/epics/{pn}\n')
+        # Disable CHECK_RELEASE. Simply not compatile with Yocto due to the different sysroots used to compile
+        # each package. Our EPICS_BASE location is never the same between packages.
+        fp.write('CHECK_RELEASE=NO\n')
         # append extras
         for e, v in extra.items():
             fp.write(f'{e}={v}\n')
@@ -124,10 +127,18 @@ def generate_config_site(d, extra: dict = {}):
         # append additional compiler/linker flags. Bit of a hack, but we only know these flags
         # NOW, and not when we configured EPICS base. This is all a product of Yocto's sandboxing...
         sysroot_arg = f'--sysroot={d.getVar("RECIPE_SYSROOT")}'
-        fp.write(f'USR_CXXFLAGS={sysroot_arg} {d.getVar("BUILD_CXXFLAGS")}\n')
-        fp.write(f'USR_CPPFLAGS={sysroot_arg} {d.getVar("BUILD_CPPFLAGS")}\n')
-        fp.write(f'USR_CFLAGS={sysroot_arg} {d.getVar("BUILD_CFLAGS")}\n')
-        fp.write(f'USR_LDFLAGS={sysroot_arg} {d.getVar("BUILD_LDFLAGS")}\n')
+        fp.write(f'USR_CXXFLAGS+={sysroot_arg} {d.getVar("CXXFLAGS")}\n')
+        fp.write(f'USR_CPPFLAGS+={sysroot_arg} {d.getVar("CPPFLAGS")}\n')
+        fp.write(f'USR_CFLAGS+={sysroot_arg} {d.getVar("CFLAGS")}\n')
+        fp.write(f'USR_LDFLAGS+={sysroot_arg} {d.getVar("LDFLAGS")}\n')
+
+    # Generate a CONFIG_SITE for HOST options
+    host_cfg_site = f'configure/CONFIG_SITE.Common.{host_arch(d)}'
+    with open(host_cfg_site, 'w') as fp:
+        fp.write(f'USR_CXXFLAGS+={d.getVar("BUILD_CXXFLAGS")}\n')
+        fp.write(f'USR_CPPFLAGS+={d.getVar("BUILD_CPPFLAGS")}\n')
+        fp.write(f'USR_CFLAGS+={d.getVar("BUILD_CFLAGS")}\n')
+        fp.write(f'USR_LDFLAGS+={d.getVar("BUILD_LDFLAGS")}\n')
 
     print(f'Generated {target_cfg_site}:')
     _cat_file(target_cfg_site)
