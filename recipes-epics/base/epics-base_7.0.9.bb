@@ -1,7 +1,7 @@
 SUMMARY = "EPICS base recipe"
 DESCRIPTION = "Recipe for building EPICS base for the EPICS control system."
 
-LICENSE = "LICENSE"
+LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2eeea17a15fc6ba8501fdcec09b854dc"
 LICENSE_PATH += "${S}"
 
