@@ -83,13 +83,21 @@ do_compile() {
 do_install() {
     install_dir="${D}/opt/epics/${PN}"
 
-    # Bring in the BUILD_XXX flags. These must be supplied on the command line *only* because they
+    # Build base with the build host flags
+    make -j${BB_NUMBER_THREADS} \
+        USR_CFLAGS="${BUILD_CFLAGS}" \
+        USR_CXXFLAGS="${BUILD_CXXFLAGS}" \
+        USR_LDFLAGS="${BUILD_LDFLAGS}" \
+        install.linux-${BUILD_ARCH}
+
+    # Bring in the env flags. These must be supplied on the command line *only* because they
     # may contain package specific settings (i.e. --sysroot=). Putting them in a CONFIG_SITE.Common file
     # will result in them being passed down to other EPICS packages.
     make -j${BB_NUMBER_THREADS} \
-        USR_CFLAGS="${BUILD_CFLAGS} ${CFLAGS}" \
-        USR_CXXFLAGS="${BUILD_CXXFLAGS} ${CXXFLAGS}" \
-        USR_LDFLAGS="${BUILD_LDFLAGS} ${LDFLAGS}"
+        USR_CFLAGS="${CFLAGS}" \
+        USR_CXXFLAGS="${CXXFLAGS}" \
+        USR_LDFLAGS="${LDFLAGS}" \
+        install.linux-${TARGET_ARCH}
 
     make clean
 
@@ -109,7 +117,7 @@ INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 INSANE_SKIP:${PN} = "staticdev file-rdeps arch"
 
 # Ensure we're staged to the sysroot for our deps
-SYSROOT_DIRS += "/opt/epics"
+SYSROOT_DIRS += "/opt/epics/${PN}"
 
 FILES:${PN} += "/opt/epics/${PN}/*"
 FILES_${PN}-dev += "/opt/epics/${PN}/*"
