@@ -1,6 +1,9 @@
 SUMMARY = "EPICS base recipe"
 DESCRIPTION = "Recipe for building EPICS base for the EPICS control system."
 
+# The EPICS base license is special, tell Yocto to stop trying to match against known licenses
+NO_GENERIC_LICENSE = "1"
+
 LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2eeea17a15fc6ba8501fdcec09b854dc"
 LICENSE_PATH += "${S}"
