@@ -6,6 +6,7 @@ DESCRIPTION = "Recipe for building Calc for the EPICS control system."
 LICENSE = "synApps"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=a2c259c010f2152379d7769be894bf4a"
 LICENSE_PATH += "${S}"
+NO_GENERIC_LICENSE[synApps] = "LICENSE"
 
 SRC_URI = "git://github.com/epics-modules/sscan;protocol=https;branch=master;rev=R2-11-6"
 
