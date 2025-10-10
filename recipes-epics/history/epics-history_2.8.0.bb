@@ -1,7 +1,7 @@
 inherit epics-module
 
 SUMMARY = "History recipe"
-DESCRIPTION = "Recipe for building history for the EPICS control system."
+DESCRIPTION = "Recipe for building SLAC's history for the EPICS control system."
 
 # FIXME: Update when history has a license
 LICENSE = "CLOSED"
