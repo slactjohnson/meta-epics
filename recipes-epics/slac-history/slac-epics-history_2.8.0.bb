@@ -10,7 +10,8 @@ LIC_FILES_CHKSUM = ""
 #LICENSE_PATH += "${S}"
 #NO_GENERIC_LICENSE[EPICS] = "LICENSE"
 
-SRC_URI = "git://github.com/slac-epics/history;protocol=https;branch=master;rev=R2.8.0"
+SRCREV = "6cbf5170d5be489c24b21b7f9d2f9d3e44444728"
+SRC_URI = "git://github.com/slac-epics/history;protocol=https;branch=master;rev=${SRCREV}"
 
 DEPENDS += "epics-base"
 

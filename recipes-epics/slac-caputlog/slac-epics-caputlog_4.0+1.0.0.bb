@@ -10,7 +10,8 @@ LIC_FILES_CHKSUM = ""
 #LICENSE_PATH += "${S}"
 #NO_GENERIC_LICENSE[EPICS] = "LICENSE"
 
-SRC_URI = "git://github.com/slac-epics/caPutLog;branch=R4.0-1.branch;protocol=https;rev=R4.0-1.0.0"
+SRCREV = "ade180888a359fe18edeab72ef9817d0326faf6d"
+SRC_URI = "git://github.com/slac-epics/caPutLog;branch=R4.0-1.branch;protocol=https;rev=${SRCREV}"
 
 DEPENDS += "epics-base"
 
