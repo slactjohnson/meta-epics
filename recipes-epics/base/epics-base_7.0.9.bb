@@ -12,7 +12,8 @@ NO_GENERIC_LICENSE[EPICS] = "LICENSE"
 BBCLASSEXTEND =+ "native nativesdk"
 COMPATIBLE_HOST = "(x86_64|aarch64).*-linux"
 
-SRC_URI = "gitsm://github.com/epics-base/epics-base;protocol=https;branch=7.0;rev=07572ab02593fa225660fdee670850c9989f5851"
+SRCREV = "07572ab02593fa225660fdee670850c9989f5851"
+SRC_URI = "gitsm://github.com/epics-base/epics-base;protocol=https;branch=7.0;rev=${SRCREV}"
 
 DEPENDS += " readline"
 
