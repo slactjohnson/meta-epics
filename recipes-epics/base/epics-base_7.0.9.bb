@@ -122,13 +122,36 @@ INHIBIT_PACKAGE_STRIP = "1"
 INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
 
 # Disable other checks that are incompatible here
-# 1. arch needs to be skipped because we install certain host tools too (i.e. msi)
+# 1. arch needs to be skipped for the native package because we're installing binaries for the build host
 # 2. file-rdeps needs to be skipped for the same reason
 # 3. staticdev is needed because we include static libs in the base package
-INSANE_SKIP:${PN} = "staticdev file-rdeps arch"
+INSANE_SKIP:${PN} = "staticdev file-rdeps"
+INSANE_SKIP:${PN}-native = "arch staticdev file-rdeps"
 
 # Ensure we're staged to the sysroot for our deps
 SYSROOT_DIRS += "/opt/epics/${PN}"
 
-FILES:${PN} += "/opt/epics/${PN}/*"
-FILES_${PN}-dev += "/opt/epics/${PN}/*"
+# Common directories to install for both native and target pkgs
+ALL_FILES += "/opt/epics/${PN}/db"
+ALL_FILES += "/opt/epics/${PN}/dbd"
+ALL_FILES += "/opt/epics/${PN}/include"
+ALL_FILES += "/opt/epics/${PN}/configure"
+ALL_FILES += "/opt/epics/${PN}/cfg"
+ALL_FILES += "/opt/epics/${PN}/templates"
+ALL_FILES += "/opt/epics/${PN}/doc"
+ALL_FILES += "/opt/epics/${PN}/html"
+
+# Build a package for the build host
+PACKAGES += "${PN}-native"
+FILES:${PN}-native += "${ALL_FILES}"
+FILES:${PN}-native += "/opt/epics/${PN}/bin/linux-${BUILD_ARCH}"
+FILES:${PN}-native += "/opt/epics/${PN}/lib/linux-${BUILD_ARCH}"
+FILES:${PN}-native += "/opt/epics/${PN}/lib/perl"
+
+# Build a package for the target system
+FILES:${PN} += "${ALL_FILES}"
+FILES:${PN} += "/opt/epics/${PN}/bin/linux-${TARGET_ARCH}"
+FILES:${PN} += "/opt/epics/${PN}/lib/linux-${TARGET_ARCH}"
+
+#FILES:${PN} += "/opt/epics/${PN}/*"
+#FILES_${PN}-dev += "/opt/epics/${PN}/*"

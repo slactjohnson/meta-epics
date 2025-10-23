@@ -5,8 +5,8 @@
 # Default module name is the package name
 MODNAME = "${PN}"
 
-# All EPICS modules depend on epics-base
-DEPENDS += "epics-base"
+# All EPICS modules depend on epics-base and epics-base-native
+DEPENDS += "epics-base epics-base-native"
 
 # Add your EPICS dependencies to this variable
 EPICS_DEPENDS = ""
@@ -14,8 +14,9 @@ EPICS_DEPENDS = ""
 # Disable other checks that are incompatible with the EPICS build style
 # - staticdev is incompatible with packages that include static libs in the base package.
 # - file-rdeps is incompatible with combined sdk/target packages, where we have a mix of host tools and target bins.
-# - arch is incompatible with combined native/nativesdk packages
-INSANE_SKIP:${PN} = "file-rdeps staticdev arch"
+# - arch is incompatible with -native packages, since they contain binaries for the build host OS
+INSANE_SKIP:${PN} = "file-rdeps staticdev"
+INSANE_SKIP:${PN}-native = "file-rdeps staticdev arch"
 
 # Disable stripping and debug split; doesn't work for combined packages like this
 INHIBIT_SYSROOT_STRIP = "1"
@@ -44,10 +45,42 @@ do_compile() {
 
 do_install() {
     make -j${BB_NUMBER_THREADS} install
+
+    # Copy iocBoot and cpuBoot directories
+    for d in iocBoot cpuBoot; do
+        if [ -d $d ]; then
+            cp -rfv $d "${D}/opt/epics/${MODNAME}/$d"
+        fi
+    done
 }
 
-FILES:${PN} += "/opt/epics/${MODNAME}/*"
+# Common directories to install for both native and target pkgs
+ALL_FILES += "/opt/epics/${PN}/db"
+ALL_FILES += "/opt/epics/${PN}/dbd"
+ALL_FILES += "/opt/epics/${PN}/include"
+ALL_FILES += "/opt/epics/${PN}/configure"
+ALL_FILES += "/opt/epics/${PN}/cfg"
+ALL_FILES += "/opt/epics/${PN}/templates"
+ALL_FILES += "/opt/epics/${PN}/doc"
+ALL_FILES += "/opt/epics/${PN}/html"
+ALL_FILES += "/opt/epics/${PN}/iocBoot"
+ALL_FILES += "/opt/epics/${PN}/cpuBoot"
+ALL_FILES += "/opt/epics/${PN}/autosave"
+ALL_FILES += "/opt/epics/${PN}/display"
+ALL_FILES += "/opt/epics/${PN}/screens"
+ALL_FILES += "/opt/epics/${PN}/archive"
 
-# Pack together a -dev package so we can expose these files to other recipes
+# Build a package for the build host
+PACKAGES += "${PN}-native"
+FILES:${PN}-native += "${ALL_FILES}"
+FILES:${PN}-native += "/opt/epics/${PN}/bin/linux-${BUILD_ARCH}"
+FILES:${PN}-native += "/opt/epics/${PN}/lib/linux-${BUILD_ARCH}"
+FILES:${PN}-native += "/opt/epics/${PN}/lib/perl"
+
+# Build a package for the target system
+FILES:${PN} += "${ALL_FILES}"
+FILES:${PN} += "/opt/epics/${PN}/bin/linux-${TARGET_ARCH}"
+FILES:${PN} += "/opt/epics/${PN}/lib/linux-${TARGET_ARCH}"
+
+# Expose this package in the sysroot
 SYSROOT_DIRS += "/opt/epics/${MODNAME}"
-FILES_${PN}-dev += "/opt/epics/${MODNAME}/*"
