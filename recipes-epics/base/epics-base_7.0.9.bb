@@ -1,16 +1,14 @@
-SUMMARY = "EPICS base recipe"
-DESCRIPTION = "Recipe for building EPICS base for the EPICS control system."
+inherit epics-component
 
-# The EPICS base license is special, tell Yocto to stop trying to match against known licenses
-NO_GENERIC_LICENSE = "1"
+SUMMARY = "EPICS base recipe"
+DESCRIPTION = "Recipe for building EPICS base, the core component of the EPICS control system."
 
 LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2eeea17a15fc6ba8501fdcec09b854dc"
 LICENSE_PATH += "${S}"
-NO_GENERIC_LICENSE[EPICS] = "LICENSE"
+#NO_GENERIC_LICENSE[EPICS] = "LICENSE"
 
 BBCLASSEXTEND =+ "native nativesdk"
-COMPATIBLE_HOST = "(x86_64|aarch64).*-linux"
 
 SRCREV = "07572ab02593fa225660fdee670850c9989f5851"
 SRC_URI = "gitsm://github.com/epics-base/epics-base;protocol=https;branch=7.0;rev=${SRCREV}"
@@ -110,25 +108,7 @@ do_install() {
         USR_LDFLAGS="${LDFLAGS}" \
         install.linux-${TARGET_ARCH}
 
-    make clean
-
     # Need to remove these so we pass the stupid tmpdir sanity check...
     rm -rf "${install_dir}/lib/pkgconfig"
 }
 
-# Disable stripping and debug split; doesn't work for combined packages like this
-INHIBIT_SYSROOT_STRIP = "1"
-INHIBIT_PACKAGE_STRIP = "1"
-INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
-
-# Disable other checks that are incompatible here
-# 1. arch needs to be skipped because we install certain host tools too (i.e. msi)
-# 2. file-rdeps needs to be skipped for the same reason
-# 3. staticdev is needed because we include static libs in the base package
-INSANE_SKIP:${PN} = "staticdev file-rdeps arch"
-
-# Ensure we're staged to the sysroot for our deps
-SYSROOT_DIRS += "/opt/epics/${PN}"
-
-FILES:${PN} += "/opt/epics/${PN}/*"
-FILES_${PN}-dev += "/opt/epics/${PN}/*"
