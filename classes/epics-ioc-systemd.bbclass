@@ -14,17 +14,17 @@ RDEPENDS:${PN} += "procserv"
 # --- User provided settings --- #
 
 # Port to run procServ on
-PS_PORT = "30000"
+PS_PORT ?= "30000"
 
 # IOC application name (located within this package's bin/<arch>)
 # If left empty, it will rely on the shebang line in the st.cmd
-IOC_APP_NAME = ""
+IOC_APP_NAME ?= ""
 
 # Path to the IOC, relative to the package root. ex: iocBoot/sioc-my-example
-IOC_PATH = ""
+IOC_PATH ?= ""
 
 # Name of the IOC's st.cmd (usually just st.cmd)
-IOC_ST_CMD = "st.cmd"
+IOC_ST_CMD ?= "st.cmd"
 
 # --- End user provided settings --- #
 
