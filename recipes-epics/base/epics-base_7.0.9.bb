@@ -90,7 +90,7 @@ do_compile() {
 }
 
 do_install() {
-    install_dir="${D}/opt/epics/${PN}"
+    install_dir="${D}/opt/epics/${MODNAME}"
 
     # Build base with the build host flags
     make -j${BB_NUMBER_THREADS} \
@@ -110,5 +110,12 @@ do_install() {
 
     # Need to remove these so we pass the stupid tmpdir sanity check...
     rm -rf "${install_dir}/lib/pkgconfig"
+
+    mkdir -p "${D}/usr/local/bin"
+    for prog in caput caget cainfo camonitor catime caRepeater pvcall pvget pvinfo pvlist pvmonitor pvput
+    do
+        ln -s /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}/$prog "${D}/usr/local/bin/$prog"
+    done
 }
 
+FILES:${PN} += "/usr/local/bin/*"
