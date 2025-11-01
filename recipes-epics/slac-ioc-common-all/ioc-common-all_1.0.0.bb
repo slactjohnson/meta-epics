@@ -22,6 +22,6 @@ do_install () {
 }
 
 FILES:${PN} += " \
-    /opt/epics/${PN}/${PV}/pre_linux.cmd \
-    /opt/epics/${PN}/${PV}/post_linux.cmd \
+    /opt/epics/${PN}/pre_linux.cmd \
+    /opt/epics/${PN}/post_linux.cmd \
 "

@@ -32,8 +32,8 @@ do_install () {
 }
 
 FILES:${PN} += " \
-    /opt/epics/${PN}/${PV}/RULES_EXPAND \
-    /opt/epics/${PN}/${PV}/expand \
-    /opt/epics/${PN}/${PV}/expand.py \
-    /opt/epics/${PN}/${PV}/realpath \
+    /opt/epics/${PN}/RULES_EXPAND \
+    /opt/epics/${PN}/expand \
+    /opt/epics/${PN}/expand.py \
+    /opt/epics/${PN}/realpath \
 "
