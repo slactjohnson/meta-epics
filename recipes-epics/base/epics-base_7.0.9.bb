@@ -6,7 +6,6 @@ DESCRIPTION = "Recipe for building EPICS base, the core component of the EPICS c
 LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2eeea17a15fc6ba8501fdcec09b854dc"
 LICENSE_PATH += "${S}"
-#NO_GENERIC_LICENSE[EPICS] = "LICENSE"
 
 BBCLASSEXTEND =+ "native nativesdk"
 
