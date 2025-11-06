@@ -44,9 +44,9 @@ python do_configure() {
         # Build static libraries
         fp.write('STATIC_BUILD=YES\n')
         fp.write(f'CROSS_COMPILER_TARGET_ARCHS={target_arch}\n')
-        # Point at /opt/epics; better to do this here to avoid bad file paths
-        fp.write(f'INSTALL_LOCATION={install_dir}\n')
-        fp.write(f'FINAL_LOCATION={install_dir}\n')
+        # # Point at /opt/epics; better to do this here to avoid bad file paths
+        # fp.write(f'INSTALL_LOCATION={install_dir}\n')
+        # fp.write(f'FINAL_LOCATION={install_dir}\n')
         # Build only for target architecture(s), not for the build host
         fp.write('HOST_BUILD=NO\n')
 
@@ -81,20 +81,13 @@ python do_configure() {
         # Ensure we use GNU hash style, because that's what Yocto expects...
         # Can't pull in the entire BUILD_LDFLAGS var here, that needs to be done on the command line
         fp.write(f'USR_LDFLAGS+=-Wl,--hash-style=gnu\n')
-
-    # NOTE: Build is actually done during the do_install() process
-    # Installing files here will result in them being clobbered before do_install.
-    # make build.${TGTARCH} would work (in theory), but the build process relies on msi
-    # and other EPICS tools that are generated+installed as part of the install.xxx targets.
 }
 
 do_compile() {
-    echo "Skipping; all work done in do_install"
-}
-
-do_install() {
-    install_dir="${D}/opt/epics/${MODNAME}"
-
+    #echo "Skipping; all work done in do_install"
+    # Bring in the env flags. These must be supplied on the command line *only* because they
+    # may contain package specific settings (i.e. --sysroot=). Putting them in a CONFIG_SITE.Common file
+    # will result in them being passed down to other EPICS packages.
     # Build base with the build host flags
     make -j${BB_NUMBER_THREADS} \
         USR_CFLAGS="${BUILD_CFLAGS}" \
@@ -102,17 +95,19 @@ do_install() {
         USR_LDFLAGS="${BUILD_LDFLAGS}" \
         install.linux-${BUILD_ARCH}
 
-    # Bring in the env flags. These must be supplied on the command line *only* because they
-    # may contain package specific settings (i.e. --sysroot=). Putting them in a CONFIG_SITE.Common file
-    # will result in them being passed down to other EPICS packages.
     make -j${BB_NUMBER_THREADS} \
         USR_CFLAGS="${CFLAGS}" \
         USR_CXXFLAGS="${CXXFLAGS}" \
         USR_LDFLAGS="${LDFLAGS}" \
         install.linux-${TARGET_ARCH}
+}
+
+# TODO: install stuff in either do_install:class-native or do_install:class-target
+do_install() {
+    install_dir="${D}/opt/epics/${MODNAME}"
 
     # Need to remove these so we pass the stupid tmpdir sanity check...
-    rm -rf "${install_dir}/lib/pkgconfig"
+    # rm -rf "${install_dir}/lib/pkgconfig"
 
     mkdir -p "${D}/usr/local/bin"
     for prog in caput caget cainfo camonitor catime caRepeater pvcall pvget pvinfo pvlist pvmonitor pvput
