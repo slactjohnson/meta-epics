@@ -85,4 +85,4 @@ FILES:${PN} += "/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
 FILES:${PN} += "/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
 
 # Expose this package in the sysroot
-#SYSROOT_DIRS += "/opt/epics/${MODNAME}"
+SYSROOT_DIRS += "/opt/epics/${MODNAME}"
