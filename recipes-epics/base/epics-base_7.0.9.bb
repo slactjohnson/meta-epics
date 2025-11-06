@@ -127,7 +127,7 @@ do_install:append:class-target() {
 
     install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
     install -d ${install_lib}
-    cp -RP --preserve=mode,links -v ${S}/lib/linux-${TARGET_ARCH}/* ${install_bin}
+    cp -RP --preserve=mode,links -v ${S}/lib/linux-${TARGET_ARCH}/* ${install_lib}
 
     # Symlink commonly used EPICS CLI tools
     mkdir -p "${D}/usr/local/bin"
