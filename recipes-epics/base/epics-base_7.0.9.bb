@@ -108,18 +108,6 @@ do_install() {
         cp -RP --preserve=mode,links -v ${S}/$subdir/* ${install_dir}/$subdir
     done
 
-    mkdir -p "${D}/usr/local/bin"
-    for prog in caput caget cainfo camonitor catime caRepeater pvcall pvget pvinfo pvlist pvmonitor pvput
-    do
-        ln -s /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}/$prog "${D}/usr/local/bin/$prog"
-    done
-
-    # The generated caRepeater.service uses paths in our Yocto tmpdir. Re-run the substitution ourselves and install
-    mkdir -p "${D}/etc/systemd/system/multi-user.target.wants"
-    cp "modules/ca/src/client/caRepeater.service@" "${D}/etc/systemd/system/caRepeater.service"
-    sed -i "s,@INSTALL_BIN@,/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH},g" "${D}/etc/systemd/system/caRepeater.service"
-    chmod 644 "${D}/etc/systemd/system/caRepeater.service"
-    ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
 }
 
 do_install:append:class-native() {
@@ -140,6 +128,20 @@ do_install:append:class-target() {
     install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
     install -d ${install_lib}
     cp -RP --preserve=mode,links -v ${S}/lib/linux-${TARGET_ARCH}/* ${install_bin}
+
+    # Symlink commonly used EPICS CLI tools
+    mkdir -p "${D}/usr/local/bin"
+    for prog in caput caget cainfo camonitor catime caRepeater pvcall pvget pvinfo pvlist pvmonitor pvput
+    do
+        ln -s /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}/$prog "${D}/usr/local/bin/$prog"
+    done
+
+    # The generated caRepeater.service uses paths in our Yocto tmpdir. Re-run the substitution ourselves and install
+    mkdir -p "${D}/etc/systemd/system/multi-user.target.wants"
+    cp "modules/ca/src/client/caRepeater.service@" "${D}/etc/systemd/system/caRepeater.service"
+    sed -i "s,@INSTALL_BIN@,/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH},g" "${D}/etc/systemd/system/caRepeater.service"
+    chmod 644 "${D}/etc/systemd/system/caRepeater.service"
+    ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
 }
 
 FILES:${PN} += "/usr/local/bin/*"
