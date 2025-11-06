@@ -98,7 +98,6 @@ do_compile() {
         install.linux-${TARGET_ARCH}
 }
 
-# TODO: install stuff in either do_install:class-native or do_install:class-target
 do_install() {
     install_dir="${D}/opt/epics/${MODNAME}"
 
@@ -114,6 +113,26 @@ do_install() {
     sed -i "s,@INSTALL_BIN@,/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH},g" "${D}/etc/systemd/system/caRepeater.service"
     chmod 644 "${D}/etc/systemd/system/caRepeater.service"
     ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
+}
+
+do_install:append:class-native() {
+    install_bin="${D}/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
+    install -d ${install_bin}
+    cp -RP --preserve=mode,links -v ${S}/bin/linux-${BUILD_ARCH}/* ${install_bin}
+
+    install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
+    install -d ${install_lib}
+    cp -RP --preserve=mode,links -v ${S}/lib/linux-${BUILD_ARCH}/* ${install_bin}
+}
+
+do_install:append:class-target() {
+    install_bin="${D}/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
+    install -d ${install_bin}
+    cp -RP --preserve=mode,links -v ${S}/bin/linux-${TARGET_ARCH}/* ${install_bin}
+
+    install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
+    install -d ${install_lib}
+    cp -RP --preserve=mode,links -v ${S}/lib/linux-${TARGET_ARCH}/* ${install_bin}
 }
 
 FILES:${PN} += "/usr/local/bin/*"
