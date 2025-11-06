@@ -12,13 +12,13 @@ EPICS_DEPENDS = ""
 # - staticdev is incompatible with packages that include static libs in the base package.
 # - file-rdeps is incompatible with combined sdk/target packages, where we have a mix of host tools and target bins.
 # - arch is incompatible with -native packages, since they contain binaries for the build host OS
-INSANE_SKIP:${PN} = "file-rdeps staticdev"
-INSANE_SKIP:${PN}-native = "file-rdeps staticdev arch"
+INSANE_SKIP:class-target = "file-rdeps staticdev"
+INSANE_SKIP:class-native = "file-rdeps staticdev arch"
 
 # Disable stripping and debug split; doesn't work for combined packages like this
-INHIBIT_SYSROOT_STRIP = "1"
-INHIBIT_PACKAGE_STRIP = "1"
-INHIBIT_PACKAGE_DEBUG_SPLIT = "1"
+INHIBIT_SYSROOT_STRIP:class-native = "1"
+INHIBIT_PACKAGE_STRIP:class-native = "1"
+INHIBIT_PACKAGE_DEBUG_SPLIT:class-native = "1"
 
 # Sucks, but we have to compile the package for x86_64 hosts too in case some tools run during the build process
 COMPATIBLE_HOST = "(x86_64|aarch64|arm).*linux.*"
@@ -70,7 +70,7 @@ ALL_FILES += "/opt/epics/${MODNAME}/iocsh"
 ALL_FILES += "/opt/epics/${MODNAME}/children"
 
 # Build a package for the build host
-PACKAGES += "${PN}-native"
+#PACKAGES += "${PN}-native"
 FILES:${PN}-native += "${ALL_FILES}"
 FILES:${PN}-native += "/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
 FILES:${PN}-native += "/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
@@ -82,4 +82,4 @@ FILES:${PN} += "/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
 FILES:${PN} += "/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
 
 # Expose this package in the sysroot
-SYSROOT_DIRS += "/opt/epics/${MODNAME}"
+#SYSROOT_DIRS += "/opt/epics/${MODNAME}"
