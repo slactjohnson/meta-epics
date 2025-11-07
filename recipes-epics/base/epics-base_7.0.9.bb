@@ -159,5 +159,5 @@ do_install:append:class-target() {
     ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
 }
 
-FILES:${PN} += "/usr/local/bin/*"
+FILES:${PN} += "/usr/local/bin"
 FILES:${PN} += "/etc/systemd/system"
