@@ -18,11 +18,6 @@ EPICS_DEPENDS = ""
 INSANE_SKIP:class-target = "file-rdeps staticdev"
 INSANE_SKIP:class-native = "file-rdeps staticdev arch buildpaths"
 
-# Disable stripping and debug split; doesn't work for combined packages like this
-INHIBIT_SYSROOT_STRIP:class-native = "1"
-INHIBIT_PACKAGE_STRIP:class-native = "1"
-INHIBIT_PACKAGE_DEBUG_SPLIT:class-native = "1"
-
 # Sucks, but we have to compile the package for x86_64 hosts too in case some tools run during the build process
 COMPATIBLE_HOST = "(x86_64|aarch64|arm).*linux.*"
 
