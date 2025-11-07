@@ -113,8 +113,16 @@ do_install() {
     cp -RP --preserve=mode,links -v ${S}/src/tools/* ${install_dir}/src/tools
 
     # Install more EPICS Perl tools
-    install -d ${install_dir}/lib/perl
-    cp -RP --preserve=mode,links -v ${S}/lib/perl/* ${install_dir}/lib/perl
+    # Have to be more specific here rather than copying _everything_ because
+    # of libCap5.so that gets generated for the build host under this directory
+    for subdir in DBD EPICS Pod URI; do
+        install -d ${install_dir}/lib/perl/${subdir}
+        cp -RP --preserve=mode,links -v ${S}/lib/perl/${subdir}/* ${install_dir}/lib/perl/${subdir}
+    done
+
+    for fname in CA.pm DBD.pm EpicsHostArch.pl; do
+        install -m 0755 ${S}/lib/perl/$fname ${install_dir}/lib/perl/$fname
+    done
 }
 
 do_install:append:class-native() {
