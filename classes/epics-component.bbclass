@@ -71,7 +71,9 @@ ALL_FILES += "/opt/epics/${MODNAME}/lib/perl"
 
 
 # Build a package for the build host
-PACKAGES += "${PN}-native"
+# PACKAGES += "${PN}-native"
+PACKAGE_BEFORE_PN = "${PN}-native"
+
 FILES:${PN}-native += "/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
 FILES:${PN}-native += "/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
 
