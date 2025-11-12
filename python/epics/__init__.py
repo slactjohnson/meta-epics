@@ -102,7 +102,7 @@ def generate_config_site(d, extra: dict = {}):
             fp.seek(0, io.SEEK_END)
             # Tweak location of build products
             fp.write(f'INSTALL_LOCATION={pfx}/opt/epics/{pn}\n')
-            fp.write(f'FINAL_LOCATION={pfx}/opt/epics/{pn}\n')
+            fp.write(f'FINAL_LOCATION=/opt/epics/{pn}\n')
             # iocBoot/cpuBoot will be installed here too, but only run under the target.
             fp.write(f'IOCS_APPL_TOP=/opt/epics/{pn}\n')
             # Disable CHECK_RELEASE. Simply not compatile with Yocto due to the different sysroots used to compile
