@@ -47,7 +47,7 @@ python do_configure() {
         fp.write(f'CROSS_COMPILER_TARGET_ARCHS={target_arch}\n')
         # Point at /opt/epics; better to do this here to avoid bad file paths
         fp.write(f'INSTALL_LOCATION={install_dir}\n')
-        fp.write(f'FINAL_LOCATION={install_dir}\n')
+        fp.write(f'FINAL_LOCATION=/opt/epics/{PN}\n')
         # Build only for target architecture(s), not for the build host
         fp.write('HOST_BUILD=NO\n')
 
@@ -121,10 +121,9 @@ do_install() {
         ln -s /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}/$prog "${D}/usr/local/bin/$prog"
     done
 
-    # The generated caRepeater.service uses paths in our Yocto tmpdir. Re-run the substitution ourselves and install
+    # Install the generated caRepeater.service
     mkdir -p "${D}/etc/systemd/system/multi-user.target.wants"
-    cp "modules/ca/src/client/caRepeater.service@" "${D}/etc/systemd/system/caRepeater.service"
-    sed -i "s,@INSTALL_BIN@,/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH},g" "${D}/etc/systemd/system/caRepeater.service"
+    cp "${D}/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}/caRepeater.service" "${D}/etc/systemd/system/caRepeater.service"
     chmod 644 "${D}/etc/systemd/system/caRepeater.service"
     ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
 }
