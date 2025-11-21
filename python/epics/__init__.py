@@ -108,6 +108,9 @@ def generate_config_site(d, extra: dict = {}):
             # Disable CHECK_RELEASE. Simply not compatile with Yocto due to the different sysroots used to compile
             # each package. Our EPICS_BASE location is never the same between packages.
             fp.write('CHECK_RELEASE=NO\n')
+            # Enable host build when requested
+            if d.getVar('ENABLE_HOST_PACKAGE') == '1':
+                fp.write('HOST_BUILD=YES\n')
             # append extras
             for e, v in extra.items():
                 fp.write(f'{e}={v}\n')
