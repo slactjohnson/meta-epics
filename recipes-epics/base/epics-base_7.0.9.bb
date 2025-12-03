@@ -7,7 +7,10 @@ LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=2eeea17a15fc6ba8501fdcec09b854dc"
 LICENSE_PATH += "${S}"
 
-BBCLASSEXTEND =+ "native nativesdk"
+BBCLASSEXTEND = "native nativesdk"
+
+# Force MODNAME to epics-base for both native and target recipe
+MODNAME = "epics-base"
 
 SRCREV = "07572ab02593fa225660fdee670850c9989f5851"
 SRC_URI = "gitsm://github.com/epics-base/epics-base;protocol=https;branch=7.0;rev=${SRCREV}"
@@ -90,7 +93,9 @@ do_compile() {
         USR_CXXFLAGS="${BUILD_CXXFLAGS}" \
         USR_LDFLAGS="${BUILD_LDFLAGS}" \
         install.linux-${BUILD_ARCH}
+}
 
+do_compile:append:class-target() {
     make -j${BB_NUMBER_THREADS} \
         USR_CFLAGS="${CFLAGS}" \
         USR_CXXFLAGS="${CXXFLAGS}" \
@@ -123,19 +128,8 @@ do_install() {
     for fname in CA.pm DBD.pm EpicsHostArch.pl; do
         install -m 0755 ${S}/lib/perl/$fname ${install_dir}/lib/perl/$fname
     done
-}
 
-do_install:append:class-native() {
-    install_bin="${D}/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
-    install -d ${install_bin}
-    cp -RP --preserve=mode,links -v ${S}/bin/linux-${BUILD_ARCH}/* ${install_bin}
-
-    install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
-    install -d ${install_lib}
-    cp -RP --preserve=mode,links -v ${S}/lib/linux-${BUILD_ARCH}/* ${install_bin}
-}
-
-do_install:append:class-target() {
+    # Regardless of target or native build, the TARGET_ARCH is correct
     install_bin="${D}/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
     install -d ${install_bin}
     cp -RP --preserve=mode,links -v ${S}/bin/linux-${TARGET_ARCH}/* ${install_bin}
@@ -143,7 +137,19 @@ do_install:append:class-target() {
     install_lib="${D}/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
     install -d ${install_lib}
     cp -RP --preserve=mode,links -v ${S}/lib/linux-${TARGET_ARCH}/* ${install_lib}
+}
 
+do_install:append:class-native() {
+    native_bin="${D}${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
+    install -d ${native_bin}
+    cp -RP --preserve=mode,links -v ${S}/bin/linux-${BUILD_ARCH}/* ${native_bin}
+
+    native_lib="${D}${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
+    install -d ${native_lib}
+    cp -RP --preserve=mode,links -v ${S}/lib/linux-${BUILD_ARCH}/* ${native_lib}
+}
+
+do_install:append:class-target() {
     # Symlink commonly used EPICS CLI tools
     mkdir -p "${D}/usr/local/bin"
     for prog in caput caget cainfo camonitor catime caRepeater pvcall pvget pvinfo pvlist pvmonitor pvput
@@ -159,5 +165,5 @@ do_install:append:class-target() {
     ln -s "/etc/systemd/system/caRepeater.service" "${D}/etc/systemd/system/multi-user.target.wants/caRepeater.service"
 }
 
-FILES:${PN} += "/usr/local/bin"
-FILES:${PN} += "/etc/systemd/system"
+FILES:${PN}:append:class-target = " /usr/local/bin"
+FILES:${PN}:append:class-target = " /etc/systemd/system"

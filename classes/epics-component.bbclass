@@ -71,21 +71,21 @@ ALL_FILES += "/opt/epics/${MODNAME}/lib/perl"
 
 
 # Build a package for the build host
-# PACKAGES += "${PN}-native"
-PACKAGE_BEFORE_PN = "${PN}-native"
-
-FILES:${PN}-native += "/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
-FILES:${PN}-native += "/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
+PACKAGES =+ "${PN}-native"
 
 # Build a package for the target system
-FILES:${PN} += "${ALL_FILES}"
-FILES:${PN} += "/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
-FILES:${PN} += "/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
+FILES:${PN}:append:class-target = " ${ALL_FILES}"
+FILES:${PN}:append:class-target = " /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
+FILES:${PN}:append:class-target = " /opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
+
+FILES:${PN}:append:class-native = " /opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
+FILES:${PN}:append:class-native = " /opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
 
 # Expose this package in the sysroot
-SYSROOT_DIRS += "${ALL_FILES}"
-SYSROOT_DIRS += "/opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
-SYSROOT_DIRS += "/opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
+SYSROOT_DIRS:append:class-target = " /opt/epics/${MODNAME}/bin/linux-${TARGET_ARCH}"
+SYSROOT_DIRS:append:class-target = " /opt/epics/${MODNAME}/lib/linux-${TARGET_ARCH}"
+SYSROOT_DIRS:append:class-target = " ${ALL_FILES}"
 
-SYSROOT_DIRS_NATIVE += "/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
-SYSROOT_DIRS_NATIVE += "/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
+SYSROOT_DIRS_NATIVE:append = " ${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
+SYSROOT_DIRS_NATIVE:append = " ${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
+
