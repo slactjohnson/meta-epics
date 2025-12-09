@@ -3,10 +3,9 @@ inherit epics-module
 SUMMARY = "SLAC ADGenICam recipe"
 DESCRIPTION = "Recipe for building SLAC's fork of ADGenICam for the EPICS control system."
 
-LICENSE = "synApps"
+LICENSE = "EPICS"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=50d0157d9bec42219ceb621409c980e8"
 LICENSE_PATH += "${S}"
-NO_GENERIC_LICENSE[synApps] = "LICENSE"
 
 EPICS_DEPENDS += "slac-epics-adcore epics-asyn"
 DEPENDS += "${EPICS_DEPENDS}"
