@@ -108,7 +108,7 @@ do_install() {
 
     # Install built or otherwise useful EPICS files
     # Arch specific files are handled in do_install:append functions below
-    for subdir in configure db dbd include templates; do
+    for subdir in configure cfg db dbd include templates; do
         install -d ${install_dir}/$subdir
         cp -RP --preserve=mode,links -v ${S}/$subdir/* ${install_dir}/$subdir
     done
