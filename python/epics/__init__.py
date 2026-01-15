@@ -112,6 +112,8 @@ def generate_config_site(d, extra: dict = {}):
             fp.write('CHECK_RELEASE=NO\n')
             # Locate tools built for build host
             fp.write(f'TOOLS={native_root}/opt/epics/epics-base/bin/{harch}\n')
+            # Fix missing msi (FIXME? this should be better)
+            fp.write(f'MSI3_15={native_root}/opt/epics/epics-base/bin/{harch}/msi\n')
             # append extras
             for e, v in extra.items():
                 fp.write(f'{e}={v}\n')
