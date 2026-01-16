@@ -56,6 +56,11 @@ do_install() {
     done
 }
 
+# See comment above; need to do this before tasks with compilation
+do_install:prepend() {
+    export PERL5LIB="${RECIPE_SYSROOT}/opt/epics/epics-base/lib/perl"
+}
+
 # Common directories to install for both native and target pkgs
 ALL_FILES += "/opt/epics/${MODNAME}/db"
 ALL_FILES += "/opt/epics/${MODNAME}/dbd"
