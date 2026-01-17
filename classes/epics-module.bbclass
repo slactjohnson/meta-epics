@@ -17,3 +17,10 @@ do_install:append() {
     # Sanitize envPaths
     find "${D}/opt/epics/${MODNAME}" -type f -name 'envPaths' -exec sed -i "s,${RECIPE_SYSROOT},,g" {} \;
 }
+
+# Source code packaging
+FILES:${PN}-src = "/opt/epics/${MODNAME}/Makefile"
+FILES:${PN}-src += "/opt/epics/${MODNAME}/${PN}"
+FILES:${PN}-src += "/opt/epics/${MODNAME}/app"
+FILES:${PN}-src += "/opt/epics/${MODNAME}/*App"
+FILES:${PN}-src += "/opt/epics/${MODNAME}/*Sup"

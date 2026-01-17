@@ -48,8 +48,9 @@ do_compile:prepend() {
 do_install() {
     make -j${BB_NUMBER_THREADS} install
 
+    cp Makefile "${D}/opt/epics/${MODNAME}/Makefile"
     # Copy iocBoot and cpuBoot directories
-    for d in iocBoot cpuBoot; do
+    for d in iocBoot cpuBoot app *App *Sup; do
         if [ -d $d ]; then
             cp -rfv $d "${D}/opt/epics/${MODNAME}/$d"
         fi
@@ -83,7 +84,7 @@ ALL_FILES += "/opt/epics/${MODNAME}/lib/perl"
 
 
 # Build a package for the build host
-PACKAGES =+ "${PN}-native"
+PACKAGES += "${PN}-native"
 
 # Build a package for the target system
 FILES:${PN}:append:class-target = " ${ALL_FILES}"
@@ -100,4 +101,3 @@ SYSROOT_DIRS:append:class-target = " ${ALL_FILES}"
 
 SYSROOT_DIRS_NATIVE:append = " ${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/bin/linux-${BUILD_ARCH}"
 SYSROOT_DIRS_NATIVE:append = " ${STAGING_DIR_NATIVE}/opt/epics/${MODNAME}/lib/linux-${BUILD_ARCH}"
-
