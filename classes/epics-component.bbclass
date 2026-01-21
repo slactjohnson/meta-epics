@@ -48,7 +48,6 @@ do_compile:prepend() {
 do_install() {
     make -j${BB_NUMBER_THREADS} install
 
-    cp Makefile "${D}/opt/epics/${MODNAME}/Makefile"
     # Copy iocBoot and cpuBoot directories
     for d in iocBoot cpuBoot; do
         if [ -d $d ]; then
