@@ -10,7 +10,7 @@ LICENSE_PATH += "${S}"
 SRCREV = "605dfef5ca2739a2cc0257658ee7261210beab5d"
 SRC_URI = "git://github.com/ffeldbauer/drvAsynI2C;protocol=https;branch=master;rev=${SRCREV}"
 
-EPICS_DEPENDS += "epics-asyn" 
+EPICS_DEPENDS += "epics-asyn epics-streamdevice-i2c"
 DEPENDS += "${EPICS_DEPENDS} i2c-tools"
 
 S = "${WORKDIR}/git"
