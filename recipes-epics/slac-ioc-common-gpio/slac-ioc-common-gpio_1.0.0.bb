@@ -10,7 +10,7 @@ LICENSE_PATH += "${S}"
 # Remove slac-epics-iocadmin for now
 EPICS_DEPENDS += "epics-autosave epics-devgpiogeneric"
 
-SRCREV = "55b4991aae42efc8dac4e5fc10245feaf3d170fd"
+SRCREV = "d6f81a5135f001ddde2c0930225bda87408f0793"
 SRC_URI = "git://git@github.com/slactjohnson/ioc-common-gpio.git;protocol=ssh;branch=working;rev=${SRCREV}"
 
 S = "${WORKDIR}/git"
