@@ -19,4 +19,10 @@ do_install:append() {
             cp -rfv $d "${D}/opt/epics/${MODNAME}/$d"
         fi
     done
+
+    # Sanitize child IOC files
+    for i in IOC_APPL_TOP envPaths st.cmd; do
+        find "${D}/opt/epics/${MODNAME}" -type f -name $i -exec sed -i "s,${S},/opt/epics/${MODNAME},g" {} \;
+        find "${D}/opt/epics/${MODNAME}" -type f -name $i -exec sed -i "s,${RECIPE_SYSROOT},,g" {} \;
+    done
 }
