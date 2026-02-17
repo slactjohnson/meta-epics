@@ -14,6 +14,9 @@ S = "${WORKDIR}/git"
 
 RDEPENDS:${PN} = "bash python3"
 
+# This repo doesn't have a clean target
+CLEANBROKEN = "1"
+
 do_compile () {
     # The make file is really simple, and tries to use the build host GCC. 
     # This replicates the repository makefile, but uses the toolchain setup 
