@@ -25,4 +25,14 @@ do_install:append() {
         find "${D}/opt/epics/${MODNAME}" -type f -name $i -exec sed -i "s,${S},/opt/epics/${MODNAME},g" {} \;
         find "${D}/opt/epics/${MODNAME}" -type f -name $i -exec sed -i "s,${RECIPE_SYSROOT},,g" {} \;
     done
+
+    # Copy service files to the correct directory and setup softlinks
+    mkdir -p "${D}/etc/systemd/system/multi-user.target.wants"
+    find "${D}/opt/epics/${MODNAME}/children" -type f -name "*.service" -exec cp {} "${D}/etc/systemd/system" \;
+    for i in $(ls ${D}/etc/systemd/system/*.service); do
+        service=$(basename "$i")
+        ln -s  "/etc/systemd/system/$service" "${D}/etc/systemd/system/multi-user.target.wants/$service"
+    done
 }
+
+FILES:${PN} += "/etc/systemd/system"
