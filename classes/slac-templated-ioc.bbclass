@@ -10,7 +10,7 @@ inherit epics-module
 
 EPICS_DEPENDS += "template-macros ioc-common-all"
 
-RDEPENDS += "procserv"
+RDEPENDS:${PN} += "procserv"
 
 do_install:append() {
     # Copy child IOC directories
