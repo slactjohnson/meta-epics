@@ -98,6 +98,7 @@ ALL_FILES += "/opt/epics/${MODNAME}/children"
 ALL_FILES += "/opt/epics/${MODNAME}/src/tools"
 ALL_FILES += "/opt/epics/${MODNAME}/lib/perl"
 ALL_FILES += "/opt/epics/${MODNAME}/edl"
+ALL_FILES += "/opt/epics/${MODNAME}/protocol"
 ALL_FILES += "/opt/epics/${MODNAME}/app/srcProtocol"
 
 
