@@ -11,7 +11,13 @@ NO_GENERIC_LICENSE[synApps] = "LICENSE"
 SRCREV = "2f5b175f260bc3fe35bc25a3f6c204e9d6f628c9"
 SRC_URI = "git://github.com/epics-modules/calc;protocol=https;branch=master;rev=${SRCREV}"
 
-EPICS_DEPENDS += "epics-sscan"
 DEPENDS += "${EPICS_DEPENDS}"
+
+# We decide not to build with SSCAN here; this can be changed with a bbappend
+disable_sscan () {
+    echo "SSCAN=" >> "${S}/configure/RELEASE.local"
+}
+
+do_configure[postfuncs] += "disable_sscan"
 
 S = "${WORKDIR}/git"

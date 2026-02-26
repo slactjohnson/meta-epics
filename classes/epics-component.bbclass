@@ -41,7 +41,7 @@ python do_configure() {
 }
 
 do_compile() {
-    make -j${BB_NUMBER_THREADS} build
+    oe_runmake build
 }
 
 # We can only package files in a single package; this exposes perl tools that
@@ -52,7 +52,7 @@ do_compile:prepend() {
 }
 
 do_install() {
-    make -j${BB_NUMBER_THREADS} install
+    oe_runmake install
 
     # Copy iocBoot and cpuBoot directories
     for d in iocBoot cpuBoot; do
@@ -60,6 +60,17 @@ do_install() {
             cp -rfv $d "${D}/opt/epics/${MODNAME}/$d"
         fi
     done
+
+    # Get streamDevice protocol files from typical directories
+    if [ -d protocol ]; then
+        install -d "${D}/opt/epics/${MODNAME}/protocol"
+        cp -rfv protocol "${D}/opt/epics/${MODNAME}/protocol"
+    fi
+
+    if [ -d app/srcProtocol ]; then
+        install -d "${D}/opt/epics/${MODNAME}/app"
+        cp -rfv app/srcProtocol "${D}/opt/epics/${MODNAME}/app/srcProtocol"
+    fi
 }
 
 # See comment above; need to do this before tasks with compilation
@@ -87,6 +98,8 @@ ALL_FILES += "/opt/epics/${MODNAME}/children"
 ALL_FILES += "/opt/epics/${MODNAME}/src/tools"
 ALL_FILES += "/opt/epics/${MODNAME}/lib/perl"
 ALL_FILES += "/opt/epics/${MODNAME}/edl"
+ALL_FILES += "/opt/epics/${MODNAME}/protocol"
+ALL_FILES += "/opt/epics/${MODNAME}/app/srcProtocol"
 
 
 # Build a package for the build host

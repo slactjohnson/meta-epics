@@ -43,10 +43,20 @@ def get_depends(d) -> dict:
     This is a mapping of recipe name -> path to the package.
     """
     r = {}
+    # Some EPICS dependencies have names that do not conform to the standard;
+    # for example the seq module is often listed as SNCSEQ in RELEASE. Here we
+    # keep a dictionary of non-standard dependencies and their corrected
+    # RELEASE variable.
+    alt_release = {
+        'epics-seq': 'epics-sncseq',
+        'epics-streamdevice-i2c': 'epics-streamdevice'
+    }
+
     pfx = d.getVar('RECIPE_SYSROOT')
     deps = d.getVar('EPICS_DEPENDS')
     for dep in deps.split(' '):
         if len(dep) == 0: continue
+        if dep in alt_release.keys(): dep = alt_release[dep]
         r[dep] = f'{pfx}/opt/epics/{dep}'
     return r
 
