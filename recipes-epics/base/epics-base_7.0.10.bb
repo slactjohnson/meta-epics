@@ -51,6 +51,8 @@ python do_configure() {
         fp.write(f'STATIC_BUILD={"YES" if d.getVar("EPICS_ENABLE_STATIC_LIBS") == "1" else "NO"}\n')
         fp.write(f'SHARED_LIBRARIES={"YES" if d.getVar("EPICS_ENABLE_SHARED_LIBS") == "1" else "NO"}\n')
         fp.write(f'CROSS_COMPILER_TARGET_ARCHS={target_arch}\n')
+        # Use $ORIGIN for RPATH so we dont need to set LD_LIBRARY_PATH
+        fp.write('LINKER_USE_RPATH=ORIGIN\n')
 
         # Point at /opt/epics; better to do this here to avoid bad file paths
         #TODO: fp.write(f'INSTALL_LOCATION={install_dir}\n')
