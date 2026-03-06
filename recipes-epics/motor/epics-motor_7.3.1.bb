@@ -17,5 +17,10 @@ S = "${WORKDIR}/git"
 
 MODNAME = "epics-motor"
 
-# Skipping IPAC, Lua, MX, and modbus for now
-EPICS_DEPENDS += "epics-asyn epics-busy epics-seq"
+# Skipping busy, sequencer, IPAC, Lua, MX, and modbus for now
+EPICS_DEPENDS += "epics-asyn"
+
+DEPENDS += "${EPICS_DEPENDS}"
+
+do_configure[postfuncs] += "unset_busy"
+do_configure[postfuncs] += "unset_seq"

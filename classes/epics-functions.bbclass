@@ -18,3 +18,10 @@ set_tirpc () {
     echo "TIRPC=YES" >> "${S}/configure/CONFIG_SITE.local"
 }
 
+unset_busy () {
+    echo "BUSY=" >> "${S}/configure/RELEASE.local"
+}
+
+unset_seq () {
+    echo "SNCSEQ=" >> "${S}/configure/RELEASE.local"
+}
