@@ -28,8 +28,8 @@ configure_libs() {
     echo 'ADCORE=$(AREA_DETECTOR)/ADCore' >> "${S}/configure/RELEASE.local"
 
     # Create RELEASE_PRODS and RELEASE_LIBS for submoduled packages
-    cp "${S}/configure/RELEASE.local" "${S}/configure/RELEASE_PRODS.local"
-    cp "${S}/configure/RELEASE.local" "${S}/configure/RELEASE_LIBS.local"
+    install "${S}/configure/RELEASE.local" "${S}/configure/RELEASE_PRODS.local"
+    install "${S}/configure/RELEASE.local" "${S}/configure/RELEASE_LIBS.local"
 
     # Enable commonly used/utility modules
     for pkg in ADSimDetector ADCSimDetector ffmpegServer NDDriverStdArrays pvaDriver \
