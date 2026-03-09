@@ -13,7 +13,7 @@ SRC_URI = "git://github.com/mdavidsaver/linstat;protocol=https;branch=master;rev
 do_compile() {
     # HACK: Current version of linStat is broken with the 'build' rule. Specifically, the TOOLCHAIN Makefile is only generated during install
     # Remove me once that is fixed upstream.
-    oe_runmake install
+    echo "Hello, I do nothing"
 }
 
 S = "${WORKDIR}/git"
