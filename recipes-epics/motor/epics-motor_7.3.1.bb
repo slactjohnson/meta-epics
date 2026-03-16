@@ -22,11 +22,6 @@ EPICS_DEPENDS += "epics-asyn"
 
 DEPENDS += "${EPICS_DEPENDS}"
 
-# I don't think this will be needed for embedded targets
-unset_ipac () {
-    echo "IPAC=" >> "${S}/configure/RELEASE.local"
-}
-
 # Need to tell submodules where our tools are. May be a better way to do this,
 # but I couldn't figure it out.
 set_module_host_bin () {
