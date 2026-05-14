@@ -3,9 +3,10 @@ inherit epics-ioc-systemd
 SUMMARY = "EPICS Demo IOC recipe"
 DESCRIPTION = "Recipe for building a simple demo IOC for EPICS"
 
-LICENSE = "CLOSED"
+LICENSE = "BSD-3-Clause"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=d531561ed074c1f7474bc9a1593bf906"
 
-SRCREV = "9101f7aee512be85ade208c0f1cfcfa2d1b9ce6e"
+SRCREV = "56353a6a41e8dd3094e76c8f18671a7d5f8e1184"
 SRC_URI = "git://github.com/JJL772/epics-yocto-demo-ioc;protocol=https;branch=main;rev=${SRCREV}"
 
 S = "${WORKDIR}/git"
