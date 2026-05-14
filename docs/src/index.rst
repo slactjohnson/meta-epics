@@ -6,9 +6,10 @@
 Welcome to the meta-epics documentation!
 ========================================
 
-meta-epics is a Yocto layer providing a set of recipes for commonly used EPICS components
-such as EPICS base, asyn, the areaDetector modules, and more. It also provides a set of
-recipes to aide in the deployment of IOCs to embedded targets.
+meta-epics is a Yocto layer providing a framework for building EPICS related software packages
+including support modules, IOCs and extensions.
+It also provides a set of recipes for various open source EPICS components such as EPICS base,
+asyn, areaDetector and more.
 
 
 .. toctree::
