@@ -22,6 +22,7 @@ SRC_URI += " \
 DEPENDS += " readline"
 
 RDEPENDS:${PN} += " bash perl"
+RDEPENDS:${PN}:class-target += " epics-env"
 
 S = "${WORKDIR}/git"
 
