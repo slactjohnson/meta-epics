@@ -31,6 +31,8 @@ RDEPENDS:${PN} += "\
     python3-entrypoints \
     python3-pyqtgraph \
     python3-statistics \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'wayland', \
+                         'qtwayland qtwayland-plugins', '', d)} \
     "
 
 SRC_URI[sha256sum] = "1768a06997686bd4d3d899e52047054452646a2381e2c495719bf710fe45ab92"
