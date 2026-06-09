@@ -10,4 +10,8 @@ S = "${WORKDIR}/git"
 
 EXTRA_OECONF = "--disable-doc"
 
+PACKAGECONFIG ??= ""
+
+PACKAGECONFIG[remote] = "--enable-access-from-anywhere, --disable-access-from-anywhere"
+
 inherit autotools
