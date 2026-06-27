@@ -15,6 +15,14 @@ RDEPENDS:${PN} += "${EPICS_DEPENDS}"
 
 do_install:append() {
     if [ -d "${D}/opt/epics/${MODNAME}" ]; then
+        # Install and sanitize all configuration files
+        # Do RECIPE_SYSROOT_NATIVE first to avoid conflict with RECIPE_SYSROOT
+        cp -rfv configure "${D}/opt/epics/${MODNAME}"
+        find "${D}/opt/epics/${MODNAME}/configure" -type f -name 'CONFIG*' -exec sed -i "s,${RECIPE_SYSROOT}/image,,g" {} \;
+        find "${D}/opt/epics/${MODNAME}/configure" -type f -name 'CONFIG*' -exec sed -i "s,${RECIPE_SYSROOT_NATIVE},,g" {} \;
+        find "${D}/opt/epics/${MODNAME}/configure" -type f -name 'CONFIG*' -exec sed -i "s,${RECIPE_SYSROOT},,g" {} \;
+        find "${D}/opt/epics/${MODNAME}/configure" -type f -name 'CONFIG*' -exec sed -i "s,${WORKDIR},,g" {} \;
+
         # Sanitize all installed .local files
         find "${D}/opt/epics/${MODNAME}" -type f -iname '*.local' -exec sed -i "s,${RECIPE_SYSROOT},,g" {} \;
 
