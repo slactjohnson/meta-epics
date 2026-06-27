@@ -58,6 +58,9 @@ do_compile:prepend() {
 do_install() {
     oe_runmake install
 
+    # Copy top level Makefile to build on target if necessary
+    install -m 0644 ${S}/Makefile "${D}/opt/epics/${MODNAME}"
+
     # Copy iocBoot and cpuBoot directories
     for d in iocBoot cpuBoot; do
         if [ -d $d ]; then
@@ -87,6 +90,7 @@ do_install:prepend() {
 }
 
 # Common directories to install for both native and target pkgs
+ALL_FILES += "/opt/epics/${MODNAME}/Makefile"
 ALL_FILES += "/opt/epics/${MODNAME}/db"
 ALL_FILES += "/opt/epics/${MODNAME}/dbd"
 ALL_FILES += "/opt/epics/${MODNAME}/include"
