@@ -1,0 +1,21 @@
+From 2d23e6eeacec4ec53acb45b23a238c2c070c5b83 Mon Sep 17 00:00:00 2001
+From: Tyler Johnson <tylerjohnson3208@gmail.com>
+Date: Sun, 28 Jun 2026 12:54:34 -0700
+Subject: [PATCH] Remove unsupported project classifier
+
+---
+ pyproject.toml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e084b9e..d10f7db 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -13,7 +13,6 @@ authors = [
+ ]
+ classifiers = [
+     "Development Status :: 5 - Production/Stable",
+-    "Framework :: OpenTelemetry",
+     "Intended Audience :: Developers",
+     "Programming Language :: Python",
+     "Programming Language :: Python :: 3",
